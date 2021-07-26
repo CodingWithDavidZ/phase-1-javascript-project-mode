@@ -1,8 +1,5 @@
 const form = document.getElementById("searchForm");
 const toggle = document.getElementsByClassName("switch")[0];
-toggle.addEventListener("click", function () {
-  alert("clicked");
-});
 
 form.addEventListener("submit", function (e) {
   e.preventDefault();
@@ -35,6 +32,7 @@ form.addEventListener("submit", function (e) {
       const lastUpdated = `Last update: ${data.updated_at}`;
       const lastUpdatedNoTime = lastUpdated.split("T")[0];
       const twitterHandle = `Twitter: ${data.twitter_username}`;
+      const userURL = `${data.html_url}`;
 
       //display saveToggle
       const div = document.getElementById("saveToggle");
@@ -65,5 +63,14 @@ form.addEventListener("submit", function (e) {
       });
       str2 += "</ul>";
       document.getElementById("moreInfo2").innerHTML = str2;
+
+      toggle.addEventListener("click", function () {
+        fetch("http://localhost:3000/saved", {
+          method: "POST",
+          body: JSON.stringify({
+            url: userURL,
+          }),
+        });
+      });
     });
 });
