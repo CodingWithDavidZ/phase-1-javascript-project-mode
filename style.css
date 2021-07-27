@@ -10,7 +10,7 @@ body {
 }
 
 body {
-  background: url(./resource/backgrounds/BlackwWood.jpeg) center no-repeat;
+  /* background: url(./resource/backgrounds/BlackwWood.jpeg) center no-repeat; */
   background-size: cover;
   background-attachment: fixed;
 }
@@ -64,10 +64,10 @@ h2 {
   }
 }
 
-img {
-  max-width: 100%;
-  width: 100%;
-  height: auto;
+.btn2 {
+  width: 75px;
+  height: 40px;
+  background-color: #da2846;
 }
 
 /* The switch - the box around the slider */
