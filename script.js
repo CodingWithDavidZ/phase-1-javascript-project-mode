@@ -13,21 +13,29 @@ function fetchSaved() {
         .map((data) => {
           return `
           
-          <p> <a target="_blank" href="${data.url}"><img src="${data.picture}" alt="${data.id}" width="100" height="100"/></a><button class="btn btn-link" id="removeButton">Remove</button></p>`;
+          <p id=${data.id}> <a target="_blank" href="${data.url}"><img src="${data.picture}" alt="${data.id}" width="100" height="100"/></a><button class="btn btn-link" id="removeButton">Remove</button></p>`;
         })
         .join("");
       saved.innerHTML = html;
     })
     .catch((error) => {
       console.log(error);
+
+      removeBtn.addEventListener("click", function () {
+        alert("button clicked");
+        const deleteID = removeBtn.parentElement.id;
+        console.log(deleteID);
+        fetch(`http://localhost:3000/saved/${deleteID}`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+      });
     });
 }
 
-
 fetchSaved();
-
-
-          
 
 form.addEventListener("submit", function (e) {
   e.preventDefault();
@@ -109,13 +117,5 @@ form.addEventListener("submit", function (e) {
           }),
         });
       });
-    });
-    removeBtn.addEventListener("click", function () {
-    const deleteID= removeBtn.parentElemenet.id
-        fetch(`http://localhost:3000/saved/${deleteID}`, {
-          method: "DELETE",
-          headers: {
-      'Content-Type': 'application/json'
-        }
     });
 });
