@@ -12,26 +12,28 @@ function fetchSaved() {
         .map((data) => {
           return `
           
-          <p id=${data.id}> <a target="_blank" href="${data.url}"><img src="${data.picture}" alt="${data.id}" width="100" height="100"/></a><button class="btn btn-link" id="removeButton ${data.id}">Remove</button></p>`;
+          <p id=pTag${data.id}> <a target="_blank" href="${data.url}"><img src="${data.picture}" alt="${data.id}" width="100" height="100"/></a><button class="btn btn-link" id="removeButton${data.id}">Remove</button></p>`;
         })
         .join("");
       saved.innerHTML = html;
+      savedData.slice(1, 51).map((data) => {
+        document
+          .getElementById(`removeButton${data.id}`)
+          .addEventListener("click", (e) => {
+            fetch(`http://localhost:3000/saved/${data.id}`, {
+              method: "DELETE",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            });
+          });
+      });
     })
     .catch((error) => {
       console.log(error);
       //Add Event listener for remove button
-      document
-        .getElementById(`removeButton ${data.id}`)
-        .addEventListener("click", function () {
-          alert("button clicked");
-
-          fetch(`http://localhost:3000/saved/${data.id}`, {
-            method: "DELETE",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
-        });
+      //Abandoned the remove button for now because I am stuck and unable to get help.
+      //I need to finish the Minimally Viable Product asap so I will make an easier event listener to check the box
     });
 }
 

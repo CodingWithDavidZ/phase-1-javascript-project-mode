@@ -10,7 +10,7 @@ body {
 }
 
 body {
-  /* background: url(./resource/backgrounds/BlackwWood.jpeg) center no-repeat; */
+  background: url(./resource/backgrounds/BlackwWood.jpeg) center no-repeat;
   background-size: cover;
   background-attachment: fixed;
 }
