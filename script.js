@@ -1,7 +1,6 @@
 const form = document.getElementById("searchForm");
 const toggle = document.getElementById("sliderSwitch");
 const saved = document.getElementById("savedSearches");
-const removeBtn = document.getElementById("removeButton");
 
 function fetchSaved() {
   fetch("http://localhost:3000/saved")
@@ -13,25 +12,26 @@ function fetchSaved() {
         .map((data) => {
           return `
           
-          <p id=${data.id}> <a target="_blank" href="${data.url}"><img src="${data.picture}" alt="${data.id}" width="100" height="100"/></a><button class="btn btn-link" id="removeButton">Remove</button></p>`;
+          <p id=${data.id}> <a target="_blank" href="${data.url}"><img src="${data.picture}" alt="${data.id}" width="100" height="100"/></a><button class="btn btn-link" id="removeButton ${data.id}">Remove</button></p>`;
         })
         .join("");
       saved.innerHTML = html;
     })
     .catch((error) => {
       console.log(error);
+      //Add Event listener for remove button
+      document
+        .getElementById(`removeButton ${data.id}`)
+        .addEventListener("click", function () {
+          alert("button clicked");
 
-      removeBtn.addEventListener("click", function () {
-        alert("button clicked");
-        const deleteID = removeBtn.parentElement.id;
-        console.log(deleteID);
-        fetch(`http://localhost:3000/saved/${deleteID}`, {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          fetch(`http://localhost:3000/saved/${data.id}`, {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
         });
-      });
     });
 }
 
