@@ -1,22 +1,28 @@
+// Global variable declaration
 const form = document.getElementById("searchForm");
 const toggle = document.getElementById("sliderSwitch");
 const saved = document.getElementById("savedSearches");
 
+// fetch data from localhost JSON server
 function fetchSaved() {
   fetch("http://localhost:3000/saved")
     .then((res) => res.json())
     .then((savedData) => {
       console.log(savedData);
       const html = savedData
-        .slice(1, 51)
+        .slice(1, 51) //the splice prevents an undefined object od id:1 and limits saved searches to 50
         .map((data) => {
-          return `
-          
+          //Create saved elements with picture that redirects to user Github, limit picture size, and add the remove buttons that appear to be links
+          return `         
           <p id=pTag${data.id}> <a target="_blank" href="${data.url}"><img src="${data.picture}" alt="${data.id}" width="100" height="100"/></a><button class="btn btn-link" id="removeButton${data.id}">Remove</button></p>`;
         })
         .join("");
+      //display the above elements on the DOM
       saved.innerHTML = html;
+      //Re-loop over map to recover data to use in event listener
       savedData.slice(1, 51).map((data) => {
+        //the splice prevents an undefined object od id:1 and limits saved searches to 50
+        //Event listener to remove saved entries
         document
           .getElementById(`removeButton${data.id}`)
           .addEventListener("click", (e) => {
@@ -31,21 +37,20 @@ function fetchSaved() {
     })
     .catch((error) => {
       console.log(error);
-      //Add Event listener for remove button
-      //Abandoned the remove button for now because I am stuck and unable to get help.
-      //I need to finish the Minimally Viable Product asap so I will make an easier event listener to check the box
     });
 }
 
 fetchSaved();
 
+//Search form event listner
+//conjoins seperated words and feeds them into the api URL
 form.addEventListener("submit", function (e) {
   e.preventDefault();
   //find name
   const search = document.getElementById("search").value;
   //remove spaces in search query
   const originalName = search.split(" ").join("");
-
+  //clears the search bar for the next search
   document.getElementById("searchResult").innerHTML = "";
 
   // api intergration
@@ -62,7 +67,7 @@ form.addEventListener("submit", function (e) {
         <a target="_blank" href="https://www.github.com/${originalName}"> <img src= "${data.avatar_url}" width="333" height="333"/></a>
       `;
 
-      //pulled data to use in lists
+      //fetched data from api to use in lists
       const hireable = `Seeking Employment: ${data.hireable}`;
       const location = `Location: ${data.location}`;
       const fullName = `Name: ${data.name}`;
@@ -76,7 +81,7 @@ form.addEventListener("submit", function (e) {
       const userURL = data.html_url;
       const userAvatar = data.avatar_url;
 
-      //display saveToggle
+      //display and hide the saveToggle
       const div = document.getElementById("saveToggle");
       if ((div.style.display = "none")) {
         div.style.display = "block";
@@ -84,15 +89,16 @@ form.addEventListener("submit", function (e) {
         div.style.display = "none";
       }
 
+      //create an unordered list of the info wanted without forcing the DOM to loop through and display the info each time
       const basicInfoArray = [fullName, location, email, twitterHandle];
       var str = "<ul>";
-
       basicInfoArray.forEach(function (slide) {
         str += "<li>" + slide + "</li>";
       });
       str += "</ul>";
       document.getElementById("moreInfo1").innerHTML = str;
 
+      // third column of info
       const moreInfoArray = [
         createdNoTime,
         lastUpdatedNoTime,
@@ -106,6 +112,7 @@ form.addEventListener("submit", function (e) {
       str2 += "</ul>";
       document.getElementById("moreInfo2").innerHTML = str2;
 
+      //listener to allow saved searches to post to JSON server
       toggle.addEventListener("click", function () {
         fetch("http://localhost:3000/saved", {
           method: "POST",
